@@ -1,0 +1,88 @@
+const vision = require('@google-cloud/vision');
+const readline = require('readline');
+
+const client = new vision.ImageAnnotatorClient();
+
+const likelihoodMapping = {
+  'VERY_UNLIKELY': '+',
+  'UNLIKELY': '++',
+  'POSSIBLE': '+++',
+  'LIKELY': '++++',
+  'VERY_LIKELY': '+++++'
+};
+
+async function detectSafeSearch(uri) {
+  try {
+    const [result] = await client.safeSearchDetection(uri);
+    const detections = result.safeSearchAnnotation;
+    console.log(`Adult: ${likelihoodMapping[detections.adult]}`);
+    console.log(`Spoof: ${likelihoodMapping[detections.spoof]}`);
+    console.log(`Medical: ${likelihoodMapping[detections.medical]}`);
+    console.log(`Violence: ${likelihoodMapping[detections.violence]}`);
+    console.log(`Racy: ${likelihoodMapping[detections.racy]}`);
+  } catch (err) {
+    console.error('Error detecting safe search:', err);
+  }
+}
+
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+  
+  rl.question('Lütfen analiz edilecek görüntünün URL\'sini girin: ', (url) => {
+    // Burada kullanıcının girdiği URL ile ilgili işlemleri yapabiliriz
+    console.log(`Girilen URL: ${url}`);
+    // Analiz işlemini yapmak için fonksiyonu çağırabiliriz
+    detectSafeSearch(url);
+    
+    // Kullanıcıdan girdiyi almayı bitir
+    rl.close();
+  });
+
+  """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+  process.env.GOOGLE_APPLICATION_CREDENTIALS = "C:\\Users\\Görkem\\vision_deneme\\secret-reactor-415208-49c4b6a1b8d8.json";
+const vision = require('@google-cloud/vision');
+const readline = require('readline');
+
+const client = new vision.ImageAnnotatorClient();
+
+const likelihoodMapping = {
+  'UNKNOWN':'0',
+  'VERY_UNLIKELY': '+',
+  'UNLIKELY': '++',
+  'POSSIBLE': '+++',
+  'LIKELY': '++++',
+  'VERY_LIKELY': '+++++'
+};
+
+async function detectSafeSearch(uri) {
+  try {
+    const [result] = await client.safeSearchDetection(uri);
+    const detections = result.safeSearchAnnotation;
+    console.log(`*****Görsel Analizi*****`);
+    console.log(`Adult: ${likelihoodMapping[detections.adult]}`);
+    console.log(`Spoof: ${likelihoodMapping[detections.spoof]}`);
+    console.log(`Medical: ${likelihoodMapping[detections.medical]}`);
+    console.log(`Violence: ${likelihoodMapping[detections.violence]}`);
+    console.log(`Racy: ${likelihoodMapping[detections.racy]}`);
+  } catch (err) {
+    console.error('Error detecting safe search:', err);
+  }
+}
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+//rl.question(': ', (url) => {
+  // Burada kullanıcının girdiği URL ile ilgili işlemleri yapabiliriz
+  //console.log(`Girilen URL: ${url}`);
+  // Analiz işlemini yapmak için fonksiyonu çağırabiliriz
+  //detectSafeSearch(url);
+
+  // Kullanıcıdan girdiyi almayı bitir
+  //rl.close();
+  //});
+module.exports = { detectSafeSearch };

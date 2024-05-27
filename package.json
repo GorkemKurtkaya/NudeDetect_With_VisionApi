@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@google-cloud/vision": "^4.1.0",
+    "chalk": "2"
+  }
+}
